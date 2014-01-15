@@ -6,7 +6,7 @@ An Embedded Implementation of Redis. http://vedis.symisc.net
 Overview
 --------
 
-Vedis is an embeddable datastore C library built with over 70 commands similar in concept to Redis but without the networking layer since Vedis run in the same process of the host application.
+Vedis is an embeddable datastore C library built with over 70 [commands](http://vedis.symisc.net/commands.html) similar in concept to Redis but without the networking layer since Vedis run in the same process of the host application.
 
 
 Unlike most other datastores (i.e. memcache, Redis), Vedis does not have a separate server process. Vedis reads and writes directly to ordinary disk files. A complete database with multiple collections, is contained in a single disk file. The database file format is cross-platform, you can freely copy a database between 32-bit and 64-bit systems or between big-endian and little-endian architectures.
