@@ -23,7 +23,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  * 3. Redistributions in any form must be accompanied by information on
- *    how to obtain complete source code for the Vedis engine and any 
+ *    how to obtain complete source code for the Vedis engine and any
  *    accompanying software that uses the Vedis engine software.
  *    The source code must either be included in the distribution
  *    or be available for no more than the cost of distribution plus
@@ -46,7 +46,7 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
- * $SymiscID: vedis.c v1.2.6 Unix|Win32/64 2013-09-15 23:42:22 stable <chm@symisc.net> $ 
+ * $SymiscID: vedis.c v1.2.6 Unix|Win32/64 2013-09-15 23:42:22 stable <chm@symisc.net> $
  */
 /* This file is an amalgamation of many separate C source files from vedis version 1.2.6
  * By combining all the individual C code files into this single large file, the entire code
@@ -55,7 +55,7 @@
  * are commonly seen when vedis is compiled as a single translation unit.
  *
  * This file is all you need to compile vedis. To use vedis in other programs, you need
- * this file and the "vedis.h" header file that defines the programming interface to the 
+ * this file and the "vedis.h" header file that defines the programming interface to the
  * vedis engine.(If you do not have the "vedis.h" header file at hand, you will find
  * a copy embedded within the text of this file.Search for "Header file: <vedis.h>" to find
  * the start of the embedded vedis.h header file.) Additional code files may be needed if
@@ -77,7 +77,7 @@
  * MD5: 935b32c31005cfdaa53305ce2d582dbf
  * ----------------------------------------------------------
  */
-/* This file was automatically generated.  Do not edit (Except for compile time directives)! */ 
+/* This file was automatically generated.  Do not edit (Except for compile time directives)! */
 #ifndef  _VEDIS_H_
 #define  _VEDIS_H_
 /*
@@ -105,7 +105,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  * 3. Redistributions in any form must be accompanied by information on
- *    how to obtain complete source code for the Vedis engine and any 
+ *    how to obtain complete source code for the Vedis engine and any
  *    accompanying software that uses the Vedis engine software.
  *    The source code must either be included in the distribution
  *    or be available for no more than the cost of distribution plus
@@ -129,7 +129,7 @@
  */
 /* Make sure we can call this stuff from C++ */
 #ifdef __cplusplus
-extern "C" { 
+extern "C" {
 #endif
  /* $SymiscID: vedis.h v1.2 Unix 2013-09-16 00:38 stable <chm@symisc.net> $ */
 #include <stdarg.h> /* needed for the definition of va_list */
@@ -207,7 +207,7 @@ typedef struct vedis vedis;
  * at run-time using the vedis_lib_config() interface together with one of these verbs:
  *    VEDIS_LIB_CONFIG_THREAD_LEVEL_SINGLE
  *    VEDIS_LIB_CONFIG_THREAD_LEVEL_MULTI
- *  Platforms others than Windows and UNIX systems must install their own mutex subsystem via 
+ *  Platforms others than Windows and UNIX systems must install their own mutex subsystem via
  *  vedis_lib_config() with a configuration verb set to VEDIS_LIB_CONFIG_USER_MUTEX.
  *  Otherwise the library is not threadsafe.
  *  Note that you must link Vedis with the POSIX threads library under UNIX systems (i.e: -lpthread).
@@ -220,7 +220,7 @@ typedef struct vedis vedis;
 /* Windows Systems */
 #if !defined(__WINNT__)
 #define __WINNT__
-#endif 
+#endif
 /*
  * Determine if we are dealing with WindowsCE - which has a much
  * reduced API.
@@ -319,7 +319,7 @@ struct Sytm
 	 (pSYTM)->tm_zone = 0;
 
 /* Dynamic memory allocation methods. */
-struct SyMemMethods 
+struct SyMemMethods
 {
 	void * (*xAlloc)(unsigned int);          /* [Required:] Allocate a memory chunk */
 	void * (*xRealloc)(void *, unsigned int); /* [Required:] Re-allocate a memory chunk */
@@ -332,7 +332,7 @@ struct SyMemMethods
 /* Out of memory callback signature. */
 typedef int (*ProcMemError)(void *);
 /* Mutex methods. */
-struct SyMutexMethods 
+struct SyMutexMethods
 {
 	int (*xGlobalInit)(void);		/* [Optional:] Global mutex initialization */
 	void  (*xGlobalRelease)(void);	/* [Optional:] Global Release callback () */
@@ -350,7 +350,7 @@ struct SyMutexMethods
 #define	SX_APIEXPORT
 #endif
 /* Standard return values from Symisc public interfaces */
-#define SXRET_OK       0      /* Not an error */	
+#define SXRET_OK       0      /* Not an error */
 #define SXERR_MEM      (-1)   /* Out of memory */
 #define SXERR_IO       (-2)   /* IO error */
 #define SXERR_EMPTY    (-3)   /* Empty field */
@@ -370,7 +370,7 @@ struct SyMutexMethods
 #define SXERR_NOTIMPLEMENTED  (-17) /* Operation not implemented */
 #define SXERR_EOF      (-18) /* End of input */
 #define SXERR_PERM     (-19) /* Permission error */
-#define SXERR_NOOP     (-20) /* No-op */	
+#define SXERR_NOOP     (-20) /* No-op */
 #define SXERR_FORMAT   (-21) /* Invalid format */
 #define SXERR_NEXT     (-22) /* Not an error */
 #define SXERR_OS       (-23) /* System call return an error */
@@ -386,8 +386,8 @@ struct SyMutexMethods
 #define SXERR_RETRY    (-33) /* Retry your call */
 #define SXERR_IGNORE   (-63) /* Ignore */
 #endif /* SYMISC_PUBLIC_DEFS */
-/* 
- * Marker for exported interfaces. 
+/*
+ * Marker for exported interfaces.
  */
 #define VEDIS_APIEXPORT SX_APIEXPORT
 /* Standard Vedis return values */
@@ -397,7 +397,7 @@ struct SyMutexMethods
 #define VEDIS_ABORT    SXERR_ABORT   /* Another thread have released this instance */
 #define VEDIS_IOERR    SXERR_IO      /* IO error */
 #define VEDIS_CORRUPT  SXERR_CORRUPT /* Corrupt pointer */
-#define VEDIS_LOCKED   SXERR_LOCKED  /* Forbidden Operation */ 
+#define VEDIS_LOCKED   SXERR_LOCKED  /* Forbidden Operation */
 #define VEDIS_BUSY	 SXERR_BUSY    /* The database file is locked */
 #define VEDIS_DONE	 SXERR_DONE    /* Operation done */
 #define VEDIS_PERM     SXERR_PERM    /* Permission error */
@@ -435,7 +435,7 @@ typedef sxi64 vedis_int64;
  * Each options require a variable number of arguments.
  * The [vedis_config()] interface will return VEDIS_OK on success, any other
  * return value indicates failure.
- * For a full discussion on the configuration verbs and their expected 
+ * For a full discussion on the configuration verbs and their expected
  * parameters, please refer to this page:
  *      http://vedis.symisc.net/c_api/vedis_config.html
  */
@@ -474,8 +474,8 @@ typedef sxi64 vedis_int64;
  * value indicates failure.
  * Notes:
  * The default configuration is recommended for most applications and so the call to
- * [vedis_lib_config()] is usually not necessary. It is provided to support rare 
- * applications with unusual needs. 
+ * [vedis_lib_config()] is usually not necessary. It is provided to support rare
+ * applications with unusual needs.
  * The [vedis_lib_config()] interface is not threadsafe. The application must insure that
  * no other [vedis_*()] interfaces are invoked by other threads while [vedis_lib_config()]
  * is running. Furthermore, [vedis_lib_config()] may only be invoked prior to library
@@ -486,11 +486,11 @@ typedef sxi64 vedis_int64;
  * refer to this page:
  *      http://vedis.symisc.net/c_api/vedis_lib.html
  */
-#define VEDIS_LIB_CONFIG_USER_MALLOC            1 /* ONE ARGUMENT: const SyMemMethods *pMemMethods */ 
+#define VEDIS_LIB_CONFIG_USER_MALLOC            1 /* ONE ARGUMENT: const SyMemMethods *pMemMethods */
 #define VEDIS_LIB_CONFIG_MEM_ERR_CALLBACK       2 /* TWO ARGUMENTS: int (*xMemError)(void *), void *pUserData */
-#define VEDIS_LIB_CONFIG_USER_MUTEX             3 /* ONE ARGUMENT: const SyMutexMethods *pMutexMethods */ 
-#define VEDIS_LIB_CONFIG_THREAD_LEVEL_SINGLE    4 /* NO ARGUMENTS */ 
-#define VEDIS_LIB_CONFIG_THREAD_LEVEL_MULTI     5 /* NO ARGUMENTS */ 
+#define VEDIS_LIB_CONFIG_USER_MUTEX             3 /* ONE ARGUMENT: const SyMutexMethods *pMutexMethods */
+#define VEDIS_LIB_CONFIG_THREAD_LEVEL_SINGLE    4 /* NO ARGUMENTS */
+#define VEDIS_LIB_CONFIG_THREAD_LEVEL_MULTI     5 /* NO ARGUMENTS */
 #define VEDIS_LIB_CONFIG_VFS                    6 /* ONE ARGUMENT: const vedis_vfs *pVfs */
 #define VEDIS_LIB_CONFIG_STORAGE_ENGINE         7 /* ONE ARGUMENT: vedis_kv_methods *pStorage */
 #define VEDIS_LIB_CONFIG_PAGE_SIZE              8 /* ONE ARGUMENT: int iPageSize */
@@ -544,7 +544,7 @@ struct vedis_file {
  * This object defines the methods used to perform various operations
  * against the open file represented by the [vedis_file] object.
  *
- * If the xOpen method sets the vedis_file.pMethods element 
+ * If the xOpen method sets the vedis_file.pMethods element
  * to a non-NULL pointer, then the vedis_io_methods.xClose method
  * may be invoked even if the xOpen reported that it failed.  The
  * only way to prevent a call to xClose following a failed xOpen
@@ -563,13 +563,13 @@ struct vedis_file {
  * VEDIS_LOCK_RESERVED
  * VEDIS_LOCK_PENDING
  * VEDIS_LOCK_EXCLUSIVE
- * 
+ *
  * xLock() increases the lock. xUnlock() decreases the lock.
  * The xCheckReservedLock() method checks whether any database connection,
  * either in this process or in some other process, is holding a RESERVED,
  * PENDING, or EXCLUSIVE lock on the file. It returns true if such a lock exists
  * and false otherwise.
- * 
+ *
  * The xSectorSize() method returns the sector size of the device that underlies
  * the file. The sector size is the minimum write that can be performed without
  * disturbing other bytes in the file.
@@ -606,11 +606,11 @@ struct vedis_io_methods {
  * must register their own vfs in order to be able to use the Vedis library.
  *
  * The value of the iVersion field is initially 1 but may be larger in
- * future versions of Vedis. 
+ * future versions of Vedis.
  *
  * The szOsFile field is the size of the subclassed [vedis_file] structure
  * used by this VFS. mxPathname is the maximum length of a pathname in this VFS.
- * 
+ *
  * At least szOsFile bytes of memory are allocated by Vedis to hold the [vedis_file]
  * structure passed as the third argument to xOpen. The xOpen method does not have to
  * allocate the structure; it should just fill it in. Note that the xOpen method must
@@ -632,7 +632,7 @@ struct vedis_vfs {
   int (*xSleep)(vedis_vfs*, int microseconds);
   int (*xCurrentTime)(vedis_vfs*,Sytm *pOut);
   int (*xGetLastError)(vedis_vfs*, int, char *);
-  int (*xMmap)(const char *, void **, vedis_int64 *);  
+  int (*xMmap)(const char *, void **, vedis_int64 *);
   void (*xUnmap)(void *,vedis_int64);
 };
 /*
@@ -656,8 +656,8 @@ struct vedis_vfs {
  * Vedis.
  */
 #define VEDIS_ACCESS_EXISTS    0
-#define VEDIS_ACCESS_READWRITE 1   
-#define VEDIS_ACCESS_READ      2 
+#define VEDIS_ACCESS_READWRITE 1
+#define VEDIS_ACCESS_READ      2
 /*
  * The type used to represent a page number.  The first page in a file
  * is called page 1.  0 is used to represent "not a page".
@@ -705,7 +705,7 @@ struct vedis_kv_io
 	int (*xPageSize)(vedis_kv_handle);
 	int (*xReadOnly)(vedis_kv_handle);
 	unsigned char * (*xTmpPage)(vedis_kv_handle);
-	void (*xSetUnpin)(vedis_kv_handle,void (*xPageUnpin)(void *)); 
+	void (*xSetUnpin)(vedis_kv_handle,void (*xPageUnpin)(void *));
 	void (*xSetReload)(vedis_kv_handle,void (*xPageReload)(void *));
 	void (*xErr)(vedis_kv_handle,const char *);
 };
@@ -738,7 +738,7 @@ struct vedis_kv_cursor
  * Vedis come with two built-in KV storage engine: A Virtual Linear Hash (VLH) storage
  * engine is used for persistent on-disk databases with O(1) lookup time and an in-memory
  * hash-table or Red-black tree storage engine is used for in-memory databases.
- * Future versions of Vedis might add other built-in storage engines (i.e. LSM). 
+ * Future versions of Vedis might add other built-in storage engines (i.e. LSM).
  * Registration of a Key/Value storage engine at run-time is done via [vedis_lib_config()]
  * with a configuration verb set to VEDIS_LIB_CONFIG_STORAGE_ENGINE.
  */
@@ -770,7 +770,7 @@ struct vedis_kv_methods
 	  vedis_kv_engine *,
 	  const void *pKey,int nKeyLen,
 	  const void *pData,vedis_int64 nDataLen
-	  ); 
+	  );
     int (*xAppend)(
 	  vedis_kv_engine *,
 	  const void *pKey,int nKeyLen,
@@ -808,9 +808,9 @@ struct vedis_kv_methods
 #define VEDIS_CTX_ERR       1 /* Call context error such as unexpected number of arguments, invalid types and so on. */
 #define VEDIS_CTX_WARNING   2 /* Call context Warning */
 #define VEDIS_CTX_NOTICE    3 /* Call context Notice */
-/* 
+/*
  * C-API-REF: Please refer to the official documentation for interfaces
- * purpose and expected parameters. 
+ * purpose and expected parameters.
  */
 /* Vedis Datastore Handle */
 VEDIS_APIEXPORT int vedis_open(vedis **ppStore,const char *zStorage);
@@ -961,7 +961,7 @@ VEDIS_APIEXPORT const char * vedis_lib_copyright(void);
 #else
 #define VEDIS_PRIVATE
 #include "vedis.h"
-#endif 
+#endif
 #ifndef VEDIS_PI
 /* Value of PI */
 #define VEDIS_PI 3.1415926535898
@@ -1012,7 +1012,7 @@ typedef double             sxreal;
 #define SXI32_HIGH      0x7FFFFFFF
 #define SXU32_HIGH      0xFFFFFFFF
 #define SXI64_HIGH      0x7FFFFFFFFFFFFFFF
-#define SXU64_HIGH      0xFFFFFFFFFFFFFFFF 
+#define SXU64_HIGH      0xFFFFFFFFFFFFFFFF
 #if !defined(TRUE)
 #define TRUE 1
 #endif
@@ -1023,13 +1023,13 @@ typedef double             sxreal;
  * The following macros are used to cast pointers to integers and
  * integers to pointers.
  */
-#if defined(__PTRDIFF_TYPE__)  
+#if defined(__PTRDIFF_TYPE__)
 # define SX_INT_TO_PTR(X)  ((void*)(__PTRDIFF_TYPE__)(X))
 # define SX_PTR_TO_INT(X)  ((int)(__PTRDIFF_TYPE__)(X))
-#elif !defined(__GNUC__)    
+#elif !defined(__GNUC__)
 # define SX_INT_TO_PTR(X)  ((void*)&((char*)0)[X])
 # define SX_PTR_TO_INT(X)  ((int)(((char*)X)-(char*)0))
-#else                       
+#else
 # define SX_INT_TO_PTR(X)  ((void*)(X))
 # define SX_PTR_TO_INT(X)  ((int)(X))
 #endif
@@ -1094,7 +1094,7 @@ typedef sxi32 (*ProcHashSum)(const void *, sxu32, unsigned char *, sxu32);
 typedef sxi32 (*ProcSort)(void *, sxu32, sxu32, ProcCmp);
 #define MACRO_LIST_PUSH(Head, Item)\
 	Item->pNext = Head;\
-	Head = Item; 
+	Head = Item;
 #define MACRO_LD_PUSH(Head, Item)\
 	if( Head == 0 ){\
 		Head = Item;\
@@ -1115,18 +1115,18 @@ typedef sxi32 (*ProcSort)(void *, sxu32, sxu32, ProcCmp);
 struct SySet
 {
 	SyMemBackend *pAllocator; /* Memory backend */
-	void *pBase;              /* Base pointer */	
+	void *pBase;              /* Base pointer */
 	sxu32 nUsed;              /* Total number of used slots  */
 	sxu32 nSize;              /* Total number of available slots */
 	sxu32 eSize;              /* Size of a single slot */
-	sxu32 nCursor;	          /* Loop cursor */	
+	sxu32 nCursor;	          /* Loop cursor */
 	void *pUserData;          /* User private data associated with this container */
 };
 #define SySetBasePtr(S)           ((S)->pBase)
 #define SySetBasePtrJump(S, OFFT)  (&((char *)(S)->pBase)[OFFT*(S)->eSize])
 #define SySetUsed(S)              ((S)->nUsed)
 #define SySetSize(S)              ((S)->nSize)
-#define SySetElemSize(S)          ((S)->eSize) 
+#define SySetElemSize(S)          ((S)->eSize)
 #define SySetCursor(S)            ((S)->nCursor)
 #define SySetGetAllocator(S)      ((S)->pAllocator)
 #define SySetSetUserData(S, DATA)  ((S)->pUserData = DATA)
@@ -1359,7 +1359,7 @@ struct SyToken
 struct SyStream
 {
 	const unsigned char *zInput; /* Complete text of the input */
-	const unsigned char *zText; /* Current input we are processing */	
+	const unsigned char *zText; /* Current input we are processing */
 	const unsigned char *zEnd; /* End of input marker */
 	sxu32  nLine; /* Total number of processed lines */
 	sxu32  nIgn; /* Total number of ignored tokens */
@@ -1391,7 +1391,7 @@ struct SyLex
 **
 */
 /*
-** Assuming zIn points to the first byte of a UTF-8 character, 
+** Assuming zIn points to the first byte of a UTF-8 character,
 ** advance zIn to point to the first byte of the next UTF-8 character.
 */
 #define SX_JMP_UTF8(zIn, zEnd)\
@@ -1415,8 +1415,8 @@ struct SyLex
 }
 /* Rely on the standard ctype */
 #include <ctype.h>
-#define SyToUpper(c) toupper(c) 
-#define SyToLower(c) tolower(c) 
+#define SyToUpper(c) toupper(c)
+#define SyToLower(c) tolower(c)
 #define SyisUpper(c) isupper(c)
 #define SyisLower(c) islower(c)
 #define SyisSpace(c) isspace(c)
@@ -1431,7 +1431,7 @@ struct SyLex
 #define SyisAscii(c) isascii(c)
 #define SyisAlphaNum(c) isalnum(c)
 #define SyisGraph(c)     isgraph(c)
-#define SyDigToHex(c)    "0123456789ABCDEF"[c & 0x0F] 		
+#define SyDigToHex(c)    "0123456789ABCDEF"[c & 0x0F]
 #define SyDigToInt(c)     ((c < 0xc0 && SyisDigit(c))? (c - '0') : 0 )
 #define SyCharToUpper(c)  ((c < 0xc0 && SyisLower(c))? SyToUpper(c) : c)
 #define SyCharToLower(c)  ((c < 0xc0 && SyisUpper(c))? SyToLower(c) : c)
@@ -1519,7 +1519,7 @@ struct SHA1Context {
  * The following #defines specify the range of bytes used for locking.
  * SHARED_SIZE is the number of bytes available in the pool from which
  * a random byte is selected for a shared lock.  The pool of bytes for
- * shared locks begins at SHARED_FIRST. 
+ * shared locks begins at SHARED_FIRST.
  *
  * The same locking strategy and byte ranges are used for Unix and Windows.
  * This leaves open the possiblity of having clients on winNT, and
@@ -1535,7 +1535,7 @@ struct SHA1Context {
  * that all locks will fit on a single page even at the minimum page size.
  * PENDING_BYTE defines the beginning of the locks.  By default PENDING_BYTE
  * is set high so that we don't have to allocate an unused page except
- * for very large databases.  But one should test the page skipping logic 
+ * for very large databases.  But one should test the page skipping logic
  * by setting PENDING_BYTE low and running the entire regression suite.
  *
  * Changing the value of PENDING_BYTE results in a subtly incompatible
@@ -1592,7 +1592,7 @@ struct vedis_value
 #define MEMOBJ_NULL      0x020  /* Memory value is NULL */
 #define MEMOBJ_HASHMAP   0x040  /* Memory value is a hashmap  */
 /* Mask of all known types */
-#define MEMOBJ_ALL (MEMOBJ_STRING|MEMOBJ_INT|MEMOBJ_REAL|MEMOBJ_BOOL|MEMOBJ_NULL|MEMOBJ_HASHMAP) 
+#define MEMOBJ_ALL (MEMOBJ_STRING|MEMOBJ_INT|MEMOBJ_REAL|MEMOBJ_BOOL|MEMOBJ_NULL|MEMOBJ_HASHMAP)
 /*
  * The following macro clear the current vedis_value type and replace
  * it with the given one.
@@ -1687,7 +1687,7 @@ struct vedis
 #define VEDIS_TK_NUM       (VEDIS_TK_INTEGER|VEDIS_TK_REAL) /* Numeric token, either integer or real */
 #define VEDIS_TK_STREAM    0x0000004 /* UTF-8/Binary stream */
 #define VEDIS_TK_SEMI      0x0000008 /* ';' semi-colon */
-/* 
+/*
  * Database signature to identify a valid database image.
  */
 #define VEDIS_DB_SIG "SymiscVedis"
@@ -1745,7 +1745,7 @@ struct vedis_table_entry
 	sxu32 nHash;           /* Key hash value */
 	SyBlob sData;          /* Data */
 	sxu32 nId;             /* Unique ID associated with this entry */
-	vedis_table_entry *pNext,*pPrev; 
+	vedis_table_entry *pNext,*pPrev;
 	vedis_table_entry *pNextCollide,*pPrevCollide;
 };
 /* Allowed node types */
@@ -1861,8 +1861,8 @@ VEDIS_PRIVATE int vedisOsSectorSize(vedis_file *id);
 VEDIS_PRIVATE int vedisOsOpen(
   vedis_vfs *pVfs,
   SyMemBackend *pAlloc,
-  const char *zPath, 
-  vedis_file **ppOut, 
+  const char *zPath,
+  vedis_file **ppOut,
   unsigned int flags
 );
 VEDIS_PRIVATE int vedisOsCloseFree(SyMemBackend *pAlloc,vedis_file *pId);
@@ -2051,7 +2051,7 @@ static sxu32 VedisTableBinHash(const void *pSrc, sxu32 nLen)
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
-	}	
+	}
 	return nH;
 }
 /*
@@ -2154,7 +2154,7 @@ static int vedisTableNodeLink(vedis_table *pTable, vedis_table_entry *pNode, sxu
  */
 static void vedisTableUnlinkNode(vedis_table_entry *pNode)
 {
-	vedis_table *pTable = pNode->pTable;	
+	vedis_table *pTable = pNode->pTable;
 	/* Unlink from the corresponding bucket */
 	if( pNode->pPrevCollide == 0 ){
 		pTable->apBucket[pNode->nHash & (pTable->nSize - 1)] = pNode->pNextCollide;
@@ -2371,9 +2371,9 @@ static sxi32 vedisTableLookupBlobKey(
 		if( pNode == 0 ){
 			break;
 		}
-		if( pNode->iType == VEDIS_TABLE_ENTRY_BLOB_NODE 
+		if( pNode->iType == VEDIS_TABLE_ENTRY_BLOB_NODE
 			&& pNode->nHash == nHash
-			&& SyBlobLength(&pNode->xKey.sKey) == nKeyLen 
+			&& SyBlobLength(&pNode->xKey.sKey) == nKeyLen
 			&& SyMemcmp(SyBlobData(&pNode->xKey.sKey), pKey, nKeyLen) == 0 ){
 				/* Node found */
 				if( ppNode ){
@@ -2443,7 +2443,7 @@ static sxi32 vedisTableInsert(
 {
 	vedis_table_entry *pNode = 0;
 	sxi32 rc = SXRET_OK;
-	
+
 	if( pKey && (pKey->iFlags & (MEMOBJ_STRING|MEMOBJ_HASHMAP)) ){
 		if( (pKey->iFlags & MEMOBJ_STRING) == 0 ){
 			/* Force a string cast */
@@ -2454,7 +2454,7 @@ static sxi32 vedisTableInsert(
 			pKey = 0;
 			goto IntKey;
 		}
-		if( SXRET_OK == vedisTableLookupBlobKey(&(*pMap), SyBlobData(&pKey->sBlob), 
+		if( SXRET_OK == vedisTableLookupBlobKey(&(*pMap), SyBlobData(&pKey->sBlob),
 			SyBlobLength(&pKey->sBlob), &pNode) ){
 				/* Overwrite the old value */
 				SyBlobReset(&pNode->sData);
@@ -2508,7 +2508,7 @@ IntKey:
 		rc = vedisTableInsertIntKey(&(*pMap), pKey->x.iVal, &(*pVal));
 		if( rc == SXRET_OK ){
 			if( pKey->x.iVal >= pMap->iNextIdx ){
-				/* Increment the automatic index */ 
+				/* Increment the automatic index */
 				pMap->iNextIdx = pKey->x.iVal + 1;
 				/* Make sure the automatic index is not reserved */
 				while( SXRET_OK == vedisTableLookupIntKey(&(*pMap), pMap->iNextIdx, 0) ){
@@ -2713,7 +2713,7 @@ static vedis_table * vedisNewTable(vedis *pStore,SyString *pName,int iType,sxu32
 	pTable->iTableType = iType;
 	pTable->pStore = pStore;
 	pTable->xIntHash  = VedisTableIntHash;
-	pTable->xBlobHash = VedisTableBinHash; 
+	pTable->xBlobHash = VedisTableBinHash;
 	zPtr = (char *)&pTable[1];
 	SyMemcpy(pName->zString,zPtr,pName->nByte);
 	SyStringInitFromBuf(&pTable->sName,zPtr,pName->nByte);
@@ -2734,7 +2734,7 @@ static int vedisTableSerialize(vedis_table *pTable)
 	SyBlob sWorker;
 	sxu32 nOfft;
 	int rc;
-	
+
 	/* Start the serialization process */
 	pEngine = vedisPagerGetKvEngine(pStore);
 	pMethods = pEngine->pIo->pMethods;
@@ -2773,7 +2773,7 @@ static int vedisTableEntrySerialize(vedis_table *pTable,vedis_table_entry *pEntr
 	SyBlob sWorker;
 	sxu32 nByte = 0;
 	sxu32 nOfft;
-	
+
 	/* Start the serialization process */
 	pEngine = vedisPagerGetKvEngine(pStore);
 	pMethods = pEngine->pIo->pMethods;
@@ -2802,7 +2802,7 @@ static int vedisTableEntrySerialize(vedis_table *pTable,vedis_table_entry *pEntr
 	}
 	SyBlobDup(&pEntry->sData,&sWorker);
 	/* Perform the write process */
-	pMethods->xReplace(pEngine,SyBlobData(&sWorker),(int)nOfft,SyBlobDataAt(&sWorker,nOfft),SyBlobLength(&sWorker) - nOfft);	
+	pMethods->xReplace(pEngine,SyBlobData(&sWorker),(int)nOfft,SyBlobDataAt(&sWorker,nOfft),SyBlobLength(&sWorker) - nOfft);
 	/* All done, clean up and return */
 	SyBlobRelease(&sWorker);
 	return VEDIS_OK;
@@ -2873,7 +2873,7 @@ static int vedisUnserializeEntry(vedis_table *pTable,const unsigned char *zPtr,s
 	sxu16 iMagic;
 	sxu32 nId;
 	int iType;
-	
+
 	if( nByte < 2 /* Magic */ + 4 /* Unique ID */+ 1 /* type */ + 4 /* key length */ + 4 /* data length */ ){
 		return VEDIS_CORRUPT;
 	}
@@ -3230,7 +3230,7 @@ static sxi32 vedisTokenizeInput(SyStream *pStream,SyToken *pToken,void *pUserDat
 	return SXRET_OK;
 }
 /*
- * Tokenize a raw input. 
+ * Tokenize a raw input.
  */
 static sxi32 vedisTokenize(const char *zInput,sxu32 nLen,SySet *pOut)
 {
@@ -3435,8 +3435,8 @@ fail:
 **               +---------> READER-------+      |
 **               |              |                |
 **               |              V                |
-**               |<-------WRITER_LOCKED--------->| 
-**               |              |                |  
+**               |<-------WRITER_LOCKED--------->|
+**               |              |                |
 **               |              V                |
 **               |<------WRITER_CACHEMOD-------->|
 **               |              |                |
@@ -3445,7 +3445,7 @@ fail:
 **               |              |                |
 **               |              V                |
 **               +<------WRITER_FINISHED-------->+
-** 
+**
 **  OPEN:
 **
 **    The pager starts up in this state. Nothing is guaranteed in this
@@ -3458,35 +3458,35 @@ fail:
 **
 **  READER:
 **
-**    In this state all the requirements for reading the database in 
+**    In this state all the requirements for reading the database in
 **    rollback mode are met. Unless the pager is (or recently
-**    was) in exclusive-locking mode, a user-level read transaction is 
+**    was) in exclusive-locking mode, a user-level read transaction is
 **    open. The database size is known in this state.
-** 
+**
 **    * A read transaction may be active (but a write-transaction cannot).
 **    * A SHARED or greater lock is held on the database file.
-**    * The dbSize variable may be trusted (even if a user-level read 
+**    * The dbSize variable may be trusted (even if a user-level read
 **      transaction is not active). The dbOrigSize variables
 **      may not be trusted at this point.
-**    * Even if a read-transaction is not open, it is guaranteed that 
+**    * Even if a read-transaction is not open, it is guaranteed that
 **      there is no hot-journal in the file-system.
 **
 **  WRITER_LOCKED:
 **
 **    The pager moves to this state from READER when a write-transaction
-**    is first opened on the database. In WRITER_LOCKED state, all locks 
-**    required to start a write-transaction are held, but no actual 
+**    is first opened on the database. In WRITER_LOCKED state, all locks
+**    required to start a write-transaction are held, but no actual
 **    modifications to the cache or database have taken place.
 **
-**    In rollback mode, a RESERVED or (if the transaction was opened with 
+**    In rollback mode, a RESERVED or (if the transaction was opened with
 **    EXCLUSIVE flag) EXCLUSIVE lock is obtained on the database file when
-**    moving to this state, but the journal file is not written to or opened 
-**    to in this state. If the transaction is committed or rolled back while 
-**    in WRITER_LOCKED state, all that is required is to unlock the database 
+**    moving to this state, but the journal file is not written to or opened
+**    to in this state. If the transaction is committed or rolled back while
+**    in WRITER_LOCKED state, all that is required is to unlock the database
 **    file.
 **
 **    * A write transaction is active.
-**    * If the connection is open in rollback-mode, a RESERVED or greater 
+**    * If the connection is open in rollback-mode, a RESERVED or greater
 **      lock is held on the database file.
 **    * The dbSize and dbOrigSize variables are all valid.
 **    * The contents of the pager cache have not been modified.
@@ -3502,7 +3502,7 @@ fail:
 **
 **    * A write transaction is active.
 **    * A RESERVED or greater lock is held on the database file.
-**    * The journal file is open and the first header has been written 
+**    * The journal file is open and the first header has been written
 **      to it, but the header has not been synced to disk.
 **    * The contents of the page cache have been modified.
 **
@@ -3513,7 +3513,7 @@ fail:
 **
 **    * A write transaction is active.
 **    * An EXCLUSIVE or greater lock is held on the database file.
-**    * The journal file is open and the first header has been written 
+**    * The journal file is open and the first header has been written
 **      and synced to disk.
 **    * The contents of the page cache have been modified (and possibly
 **      written to disk).
@@ -3523,8 +3523,8 @@ fail:
 **    A rollback-mode pager changes to WRITER_FINISHED state from WRITER_DBMOD
 **    state after the entire transaction has been successfully written into the
 **    database file. In this state the transaction may be committed simply
-**    by finalizing the journal file. Once in WRITER_FINISHED state, it is 
-**    not possible to modify the database further. At this point, the upper 
+**    by finalizing the journal file. Once in WRITER_FINISHED state, it is
+**    not possible to modify the database further. At this point, the upper
 **    layer must either commit or rollback the transaction.
 **
 **    * A write transaction is active.
@@ -3532,8 +3532,8 @@ fail:
 **    * All writing and syncing of journal and database data has finished.
 **      If no error occured, all that remains is to finalize the journal to
 **      commit the transaction. If an error did occur, the caller will need
-**      to rollback the transaction. 
-**  
+**      to rollback the transaction.
+**
 **
 */
 #define PAGER_OPEN                  0
@@ -3554,7 +3554,7 @@ static const unsigned char aJournalMagic[] = {
   0xc1, 0xd2, 0xfa, 0x77, 0x2b, 0x18, 0x27, 0x2a,
 };
 /*
-** The journal header size for this pager. This is usually the same 
+** The journal header size for this pager. This is usually the same
 ** size as a single disk sector. See also setSectorSize().
 */
 #define JOURNAL_HDR_SZ(pPager) (pPager->iSectorSize)
@@ -3647,9 +3647,9 @@ struct Pager
 };
 /* Control flags */
 #define PAGER_CTRL_COMMIT_ERR   0x001 /* Commit error */
-#define PAGER_CTRL_DIRTY_COMMIT 0x002 /* Dirty commit has been applied */ 
+#define PAGER_CTRL_DIRTY_COMMIT 0x002 /* Dirty commit has been applied */
 /*
-** Read a 32-bit integer from the given file descriptor. 
+** Read a 32-bit integer from the given file descriptor.
 ** All values are stored on disk as big-endian.
 */
 static int ReadInt32(vedis_file *pFd,sxu32 *pOut,sxi64 iOfft)
@@ -3664,7 +3664,7 @@ static int ReadInt32(vedis_file *pFd,sxu32 *pOut,sxi64 iOfft)
 	return VEDIS_OK;
 }
 /*
-** Read a 64-bit integer from the given file descriptor. 
+** Read a 64-bit integer from the given file descriptor.
 ** All values are stored on disk as big-endian.
 */
 static int ReadInt64(vedis_file *pFd,sxu64 *pOut,sxi64 iOfft)
@@ -3701,7 +3701,7 @@ static int WriteInt64(vedis_file *pFd,sxu64 iNum,sxi64 iOfft)
 	return rc;
 }
 /*
-** The maximum allowed sector size. 64KiB. If the xSectorsize() method 
+** The maximum allowed sector size. 64KiB. If the xSectorsize() method
 ** returns a value larger than this, then MAX_SECTOR_SIZE is used instead.
 ** This could conceivably cause corruption following a power failure on
 ** such a system. This is currently an undocumented limit.
@@ -3761,7 +3761,7 @@ static Page * pager_fetch_page(Pager *pPager,pgno page_num)
 static Page * pager_alloc_page(Pager *pPager,pgno num_page)
 {
 	Page *pNew;
-	
+
 	pNew = (Page *)SyMemBackendPoolAlloc(pPager->pAllocator,sizeof(Page)+pPager->iPageSize);
 	if( pNew == 0 ){
 		return 0;
@@ -4161,7 +4161,7 @@ static Page * pager_get_hot_pages(Pager *pPager)
 ** - 8 bytes: Initial database page count.
 ** - 4 bytes: Sector size used by the process that wrote this journal.
 ** - 4 bytes: Database page size.
-** 
+**
 ** Followed by (JOURNAL_HDR_SZ - 28) bytes of unused space.
 */
 /*
@@ -4239,21 +4239,21 @@ static int pager_read_journal_header(
 	}
 	/* Check that the values read from the page-size and sector-size fields
     ** are within range. To be 'in range', both values need to be a power
-    ** of two greater than or equal to 512 or 32, and not greater than their 
+    ** of two greater than or equal to 512 or 32, and not greater than their
     ** respective compile time maximum limits.
     */
     if( iPageSize < VEDIS_MIN_PAGE_SIZE || iSectorSize<32
      || iPageSize > VEDIS_MAX_PAGE_SIZE || iSectorSize>MAX_SECTOR_SIZE
-     || ((iPageSize-1)&iPageSize)!=0    || ((iSectorSize-1)&iSectorSize)!=0 
+     || ((iPageSize-1)&iPageSize)!=0    || ((iSectorSize-1)&iSectorSize)!=0
     ){
-      /* If the either the page-size or sector-size in the journal-header is 
-      ** invalid, then the process that wrote the journal-header must have 
-      ** crashed before the header was synced. In this case stop reading 
+      /* If the either the page-size or sector-size in the journal-header is
+      ** invalid, then the process that wrote the journal-header must have
+      ** crashed before the header was synced. In this case stop reading
       ** the journal file here.
       */
       return VEDIS_DONE;
     }
-    /* Update the assumed sector-size to match the value used by 
+    /* Update the assumed sector-size to match the value used by
     ** the process that created this journal. If this journal was
     ** created by a process other than this one, then this routine
     ** is being called from within pager_playback(). The local value
@@ -4294,10 +4294,10 @@ static int pager_write_journal_header(Pager *pPager,unsigned char *zBuf)
 }
 /*
 ** Parameter aData must point to a buffer of pPager->pageSize bytes
-** of data. Compute and return a checksum based ont the contents of the 
+** of data. Compute and return a checksum based ont the contents of the
 ** page of data and the current value of pPager->cksumInit.
 **
-** This is not a real checksum. It is really just the sum of the 
+** This is not a real checksum. It is really just the sum of the
 ** random initial value (pPager->cksumInit) and every 200th byte
 ** of the page data, starting with byte offset (pPager->pageSize%200).
 ** Each byte is interpreted as an 8-bit unsigned integer.
@@ -4305,8 +4305,8 @@ static int pager_write_journal_header(Pager *pPager,unsigned char *zBuf)
 ** Changing the formula used to compute this checksum results in an
 ** incompatible journal file format.
 **
-** If journal corruption occurs due to a power failure, the most likely 
-** scenario is that one end or the other of the record will be changed. 
+** If journal corruption occurs due to a power failure, the most likely
+** scenario is that one end or the other of the record will be changed.
 ** It is much less likely that the two ends of the journal record will be
 ** correct and the middle be corrupt.  Thus, this "checksum" scheme,
 ** though fast and simple, catches the mostly likely kind of corruption.
@@ -4367,14 +4367,14 @@ static int pager_play_back_one_page(Pager *pPager,sxi64 *pOfft,unsigned char *zT
 }
 /*
 ** Playback the journal and thus restore the database file to
-** the state it was in before we started making changes.  
+** the state it was in before we started making changes.
 **
-** The journal file format is as follows: 
+** The journal file format is as follows:
 **
 **  (1)  8 byte prefix.  A copy of aJournalMagic[].
 **  (2)  4 byte big-endian integer which is the number of valid page records
-**       in the journal. 
-**  (3)  4 byte big-endian integer which is the initial value for the 
+**       in the journal.
+**  (3)  4 byte big-endian integer which is the initial value for the
 **       sanity checksum.
 **  (4)  8 byte integer which is the number of pages to truncate the
 **       database to during a rollback.
@@ -4437,7 +4437,7 @@ static int pager_playback(Pager *pPager)
 		return VEDIS_NOMEM;
 	}
 	SyZero((void *)zTmp,(sxu32)pPager->iPageSize);
-	/* Copy original pages out of the journal and back into the 
+	/* Copy original pages out of the journal and back into the
     ** database file and/or page cache.
     */
 	iOfft = pPager->iJournalOfft;
@@ -4469,7 +4469,7 @@ end_playback:
 ** succeeds, set the Pager.iLock variable to match the (attempted) new lock.
 **
 ** Except, if Pager.iLock is set to NO_LOCK when this function is
-** called, do not modify it. See the comment above the #define of 
+** called, do not modify it. See the comment above the #define of
 ** NO_LOCK for an explanation of this.
 */
 static int pager_unlock_db(Pager *pPager, int eLock)
@@ -4484,11 +4484,11 @@ static int pager_unlock_db(Pager *pPager, int eLock)
 /*
 ** Lock the database file to level eLock, which must be either SHARED_LOCK,
 ** RESERVED_LOCK or EXCLUSIVE_LOCK. If the caller is successful, set the
-** Pager.eLock variable to the new locking state. 
+** Pager.eLock variable to the new locking state.
 **
-** Except, if Pager.eLock is set to NO_LOCK when this function is 
-** called, do not modify it unless the new locking state is EXCLUSIVE_LOCK. 
-** See the comment above the #define of NO_LOCK for an explanation 
+** Except, if Pager.eLock is set to NO_LOCK when this function is
+** called, do not modify it unless the new locking state is EXCLUSIVE_LOCK.
+** See the comment above the #define of NO_LOCK for an explanation
 ** of this.
 */
 static int pager_lock_db(Pager *pPager, int eLock){
@@ -4510,13 +4510,13 @@ static int pager_lock_db(Pager *pPager, int eLock){
 ** a similar or greater lock is already held, this function is a no-op
 ** (returning VEDIS_OK immediately).
 **
-** Otherwise, attempt to obtain the lock using vedisOsLock(). Invoke 
-** the busy callback if the lock is currently not available. Repeat 
-** until the busy callback returns false or until the attempt to 
+** Otherwise, attempt to obtain the lock using vedisOsLock(). Invoke
+** the busy callback if the lock is currently not available. Repeat
+** until the busy callback returns false or until the attempt to
 ** obtain the lock succeeds.
 **
 ** Return VEDIS_OK on success and an error code if we cannot obtain
-** the lock. If the lock is obtained successfully, set the Pager.state 
+** the lock. If the lock is obtained successfully, set the Pager.state
 ** variable to locktype before returning.
 */
 static int pager_wait_on_lock(Pager *pPager, int locktype){
@@ -4529,7 +4529,7 @@ static int pager_wait_on_lock(Pager *pPager, int locktype){
 /*
 ** This function is called after transitioning from PAGER_OPEN to
 ** PAGER_SHARED state. It tests if there is a hot journal present in
-** the file-system for the given pager. A hot journal is one that 
+** the file-system for the given pager. A hot journal is one that
 ** needs to be played back. According to this function, a hot-journal
 ** file exists if the following criteria are met:
 **
@@ -4544,7 +4544,7 @@ static int pager_wait_on_lock(Pager *pPager, int locktype){
 ** just deleted using OsDelete, *pExists is set to 0 and VEDIS_OK
 ** is returned.
 **
-** If a hot-journal file is found to exist, *pExists is set to 1 and 
+** If a hot-journal file is found to exist, *pExists is set to 1 and
 ** VEDIS_OK returned. If no hot-journal file is present, *pExists is
 ** set to 0 and VEDIS_OK returned. If an IO error occurs while trying
 ** to determine whether or not a hot-journal file exists, the IO error
@@ -4562,7 +4562,7 @@ static int pager_has_hot_journal(Pager *pPager, int *pExists)
     int locked = 0;             /* True if some process holds a RESERVED lock */
 
     /* Race condition here:  Another process might have been holding the
-    ** the RESERVED lock and have a journal open at the vedisOsAccess() 
+    ** the RESERVED lock and have a journal open at the vedisOsAccess()
     ** call above, but then delete the journal and drop the lock before
     ** we get to the following vedisOsCheckReservedLock() call.  If that
     ** is the case, this routine might think there is a hot journal when
@@ -4572,9 +4572,9 @@ static int pager_has_hot_journal(Pager *pPager, int *pExists)
     rc = vedisOsCheckReservedLock(pPager->pfd, &locked);
     if( rc==VEDIS_OK && !locked ){
       sxi64 n = 0;                    /* Size of db file in bytes */
- 
+
       /* Check the size of the database file. If it consists of 0 pages,
-      ** then delete the journal file. See the header comment above for 
+      ** then delete the journal file. See the header comment above for
       ** the reasoning here.  Delete the obsolete journal file under
       ** a RESERVED lock to avoid race conditions.
       */
@@ -4623,12 +4623,12 @@ static int pager_journal_rollback(Pager *pPager,int check_hot)
       ** important that a RESERVED lock is not obtained on the way to the
       ** EXCLUSIVE lock. If it were, another process might open the
       ** database file, detect the RESERVED lock, and conclude that the
-      ** database is safe to read while this process is still rolling the 
+      ** database is safe to read while this process is still rolling the
       ** hot-journal back.
-      ** 
+      **
       ** Because the intermediate RESERVED lock is not requested, any
-      ** other process attempting to access the database file will get to 
-      ** this point in the code and fail to obtain its own EXCLUSIVE lock 
+      ** other process attempting to access the database file will get to
+      ** this point in the code and fail to obtain its own EXCLUSIVE lock
       ** on the database file.
       **
       ** Unless the pager is in locking_mode=exclusive mode, the lock is
@@ -4734,12 +4734,12 @@ static int pager_extract_header(Pager *pPager,const unsigned char *zRaw,sxu32 nB
 	zRaw += 4; /* 4 byte page size */
 	/* Check that the values read from the page-size and sector-size fields
     ** are within range. To be 'in range', both values need to be a power
-    ** of two greater than or equal to 512 or 32, and not greater than their 
+    ** of two greater than or equal to 512 or 32, and not greater than their
     ** respective compile time maximum limits.
     */
     if( pPager->iPageSize<VEDIS_MIN_PAGE_SIZE || pPager->iSectorSize<32
      || pPager->iPageSize>VEDIS_MAX_PAGE_SIZE || pPager->iSectorSize>MAX_SECTOR_SIZE
-     || ((pPager->iPageSize<-1)&pPager->iPageSize)!=0    || ((pPager->iSectorSize-1)&pPager->iSectorSize)!=0 
+     || ((pPager->iPageSize<-1)&pPager->iPageSize)!=0    || ((pPager->iSectorSize-1)&pPager->iSectorSize)!=0
     ){
       return VEDIS_CORRUPT;
 	}
@@ -4858,10 +4858,10 @@ static int pager_create_header(Pager *pPager)
 **      on the database file), then an attempt is made to obtain a
 **      SHARED lock on the database file. Immediately after obtaining
 **      the SHARED lock, the file-system is checked for a hot-journal,
-**      which is played back if present. 
+**      which is played back if present.
 **
-** If everything is successful, VEDIS_OK is returned. If an IO error 
-** occurs while locking the database, checking for a hot-journal file or 
+** If everything is successful, VEDIS_OK is returned. If an IO error
+** occurs while locking the database, checking for a hot-journal file or
 ** rolling back a journal file, the IO error code is returned.
 */
 static int pager_shared_lock(Pager *pPager)
@@ -4929,12 +4929,12 @@ static int pager_shared_lock(Pager *pPager)
 			}
 		}else if( rc == VEDIS_BUSY ){
 			vedisGenError(pPager->pDb,"Another process or thread have a reserved or exclusive lock on this database");
-		}		
+		}
 	}
 	return rc;
 }
 /*
-** Begin a write-transaction on the specified pager object. If a 
+** Begin a write-transaction on the specified pager object. If a
 ** write-transaction has already been opened, this function is a no-op.
 */
 VEDIS_PRIVATE int vedisPagerBegin(Pager *pPager)
@@ -4987,7 +4987,7 @@ fail:
 }
 /*
 ** This function is called at the start of every write transaction.
-** There must already be a RESERVED or EXCLUSIVE lock on the database 
+** There must already be a RESERVED or EXCLUSIVE lock on the database
 ** file when this routine is called.
 **
 */
@@ -5089,7 +5089,7 @@ static int vedisFinalizeJournal(Pager *pPager,int *pRetry,int close_jrnl)
 	return VEDIS_OK;
 }
 /*
- * Mark a single data page as writeable. The page is written into the 
+ * Mark a single data page as writeable. The page is written into the
  * main journal as required.
  */
 static int page_write(Pager *pPager,Page *pPage)
@@ -5131,7 +5131,7 @@ static int page_write(Pager *pPager,Page *pPage)
 			vedisGenError(pPager->pDb,"Database maximum page limit (64-bit) reached");
 			return VEDIS_LIMIT;
 		}
-	}	
+	}
 	return VEDIS_OK;
 }
 /*
@@ -5377,7 +5377,7 @@ static int pager_dirty_commit(Pager *pPager)
 ** This routine ensures that:
 **
 **   * the journal is synced,
-**   * all dirty pages are written to the database file, 
+**   * all dirty pages are written to the database file,
 **   * the database file is truncated (if required), and
 **   * the database file synced.
 **   * the journal file is deleted.
@@ -5479,20 +5479,20 @@ static int pager_reset_state(Pager *pPager,int bResetKvEngine)
 	return VEDIS_OK;
 }
 /*
-** If a write transaction is open, then all changes made within the 
+** If a write transaction is open, then all changes made within the
 ** transaction are reverted and the current write-transaction is closed.
 ** The pager falls back to PAGER_READER state if successful.
 **
 ** Otherwise, in rollback mode, this function performs two functions:
 **
-**   1) It rolls back the journal file, restoring all database file and 
+**   1) It rolls back the journal file, restoring all database file and
 **      in-memory cache pages to the state they were in when the transaction
 **      was opened, and
 **
 **   2) It finalizes the journal file, so that it is not used for hot
 **      rollback at any point in the future (i.e. deletion).
 **
-** Finalization of the journal file (task 2) is only performed if the 
+** Finalization of the journal file (task 2) is only performed if the
 ** rollback is successful.
 **
 */
@@ -5560,9 +5560,9 @@ static int vedisPagerDontWrite(vedis_page *pMyPage)
 	return VEDIS_OK;
 }
 /*
-** Mark a data page as writeable. This routine must be called before 
-** making changes to a page. The caller must check the return value 
-** of this function and be careful not to change any page data unless 
+** Mark a data page as writeable. This routine must be called before
+** making changes to a page. The caller must check the return value
+** of this function and be careful not to change any page data unless
 ** this routine returns VEDIS_OK.
 */
 static int vedisPageWrite(vedis_page *pMyPage)
@@ -5600,10 +5600,10 @@ static int vedisPageWrite(vedis_page *pMyPage)
 }
 /*
 ** Acquire a reference to page number pgno in pager pPager (a page
-** reference has type vedis_page*). If the requested reference is 
+** reference has type vedis_page*). If the requested reference is
 ** successfully obtained, it is copied to *ppPage and VEDIS_OK returned.
 **
-** If the requested page is already in the cache, it is returned. 
+** If the requested page is already in the cache, it is returned.
 ** Otherwise, a new page object is allocated and populated with data
 ** read from the database file.
 */
@@ -5667,11 +5667,11 @@ static int vedisInMemory(const char *zFilename)
 		return TRUE;
 	}
 	n = SyStrlen(zFilename);
-	if( n == sizeof(":mem:") - 1 && 
+	if( n == sizeof(":mem:") - 1 &&
 		SyStrnicmp(zFilename,":mem:",sizeof(":mem:") - 1) == 0 ){
 			return TRUE;
 	}
-	if( n == sizeof(":memory:") - 1 && 
+	if( n == sizeof(":memory:") - 1 &&
 		SyStrnicmp(zFilename,":memory:",sizeof(":memory:") - 1) == 0 ){
 			return TRUE;
 	}
@@ -6028,7 +6028,7 @@ VEDIS_PRIVATE sxu32 vedisPagerRandomNum(Pager *pPager)
 	return iNum;
 }
 /* Exported KV IO Methods */
-/* 
+/*
  * Refer to [vedisPagerAcquire()]
  */
 static int vedisKvIoPageGet(vedis_kv_handle pHandle,pgno iNum,vedis_page **ppPage)
@@ -6037,7 +6037,7 @@ static int vedisKvIoPageGet(vedis_kv_handle pHandle,pgno iNum,vedis_page **ppPag
 	rc = vedisPagerAcquire((Pager *)pHandle,iNum,ppPage,0,0);
 	return rc;
 }
-/* 
+/*
  * Refer to [vedisPagerAcquire()]
  */
 static int vedisKvIoPageLookup(vedis_kv_handle pHandle,pgno iNum,vedis_page **ppPage)
@@ -6046,14 +6046,14 @@ static int vedisKvIoPageLookup(vedis_kv_handle pHandle,pgno iNum,vedis_page **pp
 	rc = vedisPagerAcquire((Pager *)pHandle,iNum,ppPage,1,0);
 	return rc;
 }
-/* 
+/*
  * Refer to [vedisPagerAcquire()]
  */
 static int vedisKvIoNewPage(vedis_kv_handle pHandle,vedis_page **ppPage)
 {
 	Pager *pPager = (Pager *)pHandle;
 	int rc;
-	/* 
+	/*
 	 * Acquire a reader-lock first so that pPager->dbSize get initialized.
 	 */
 	rc = pager_shared_lock(pPager);
@@ -6062,7 +6062,7 @@ static int vedisKvIoNewPage(vedis_kv_handle pHandle,vedis_page **ppPage)
 	}
 	return rc;
 }
-/* 
+/*
  * Refer to [vedisPageWrite()]
  */
 static int vedisKvIopageWrite(vedis_page *pPage)
@@ -6075,7 +6075,7 @@ static int vedisKvIopageWrite(vedis_page *pPage)
 	rc = vedisPageWrite(pPage);
 	return rc;
 }
-/* 
+/*
  * Refer to [vedisPagerDontWrite()]
  */
 static int vedisKvIoPageDontWrite(vedis_page *pPage)
@@ -6088,7 +6088,7 @@ static int vedisKvIoPageDontWrite(vedis_page *pPage)
 	rc = vedisPagerDontWrite(pPage);
 	return rc;
 }
-/* 
+/*
  * Refer to [vedisBitvecSet()]
  */
 static int vedisKvIoPageDontJournal(vedis_page *pRaw)
@@ -6107,13 +6107,13 @@ static int vedisKvIoPageDontJournal(vedis_page *pRaw)
 	}
 	return VEDIS_OK;
 }
-/* 
+/*
  * Do not add a page to the hot dirty list.
  */
 static int vedisKvIoPageDontMakeHot(vedis_page *pRaw)
 {
 	Page *pPage = (Page *)pRaw;
-	
+
 	if( pPage == 0 ){
 		/* TICKET 1433-0348 */
 		return VEDIS_OK;
@@ -6121,7 +6121,7 @@ static int vedisKvIoPageDontMakeHot(vedis_page *pRaw)
 	pPage->flags |= PAGE_DONT_MAKE_HOT;
 	return VEDIS_OK;
 }
-/* 
+/*
  * Refer to [page_ref()]
  */
 static int vedisKvIopage_ref(vedis_page *pPage)
@@ -6131,7 +6131,7 @@ static int vedisKvIopage_ref(vedis_page *pPage)
 	}
 	return VEDIS_OK;
 }
-/* 
+/*
  * Refer to [page_unref()]
  */
 static int vedisKvIoPageUnRef(vedis_page *pPage)
@@ -6141,28 +6141,28 @@ static int vedisKvIoPageUnRef(vedis_page *pPage)
 	}
 	return VEDIS_OK;
 }
-/* 
+/*
  * Refer to the declaration of the [Pager] structure
  */
 static int vedisKvIoReadOnly(vedis_kv_handle pHandle)
 {
 	return ((Pager *)pHandle)->is_rdonly;
 }
-/* 
+/*
  * Refer to the declaration of the [Pager] structure
  */
 static int vedisKvIoPageSize(vedis_kv_handle pHandle)
 {
 	return ((Pager *)pHandle)->iPageSize;
 }
-/* 
+/*
  * Refer to the declaration of the [Pager] structure
  */
 static unsigned char * vedisKvIoTempPage(vedis_kv_handle pHandle)
 {
 	return ((Pager *)pHandle)->zTmpPage;
 }
-/* 
+/*
  * Set a page unpin callback.
  * Refer to the declaration of the [Pager] structure
  */
@@ -6171,7 +6171,7 @@ static void vedisKvIoPageUnpin(vedis_kv_handle pHandle,void (*xPageUnpin)(void *
 	Pager *pPager = (Pager *)pHandle;
 	pPager->xPageUnpin = xPageUnpin;
 }
-/* 
+/*
  * Set a page reload callback.
  * Refer to the declaration of the [Pager] structure
  */
@@ -6180,7 +6180,7 @@ static void vedisKvIoPageReload(vedis_kv_handle pHandle,void (*xPageReload)(void
 	Pager *pPager = (Pager *)pHandle;
 	pPager->xPageReload = xPageReload;
 }
-/* 
+/*
  * Log an error.
  * Refer to the declaration of the [Pager] structure
  */
@@ -6196,12 +6196,12 @@ static int pager_kv_io_init(Pager *pPager,vedis_kv_methods *pMethods,vedis_kv_io
 {
 	pIo->pHandle =  pPager;
 	pIo->pMethods = pMethods;
-	
+
 	pIo->xGet    = vedisKvIoPageGet;
 	pIo->xLookup = vedisKvIoPageLookup;
 	pIo->xNew    = vedisKvIoNewPage;
-	
-	pIo->xWrite     = vedisKvIopageWrite; 
+
+	pIo->xWrite     = vedisKvIopageWrite;
 	pIo->xDontWrite = vedisKvIoPageDontWrite;
 	pIo->xDontJournal = vedisKvIoPageDontJournal;
 	pIo->xDontMkHot = vedisKvIoPageDontMakeHot;
@@ -6247,11 +6247,12 @@ static int pager_kv_io_init(Pager *pPager,vedis_kv_methods *pMethods,vedis_kv_io
 #ifdef __WINNT__
 /* This file contains code that is specific to windows. (Mostly SQLite3 source tree) */
 #include <Windows.h>
+#endif
 /*
 ** Some microsoft compilers lack this definition.
 */
 #ifndef INVALID_FILE_ATTRIBUTES
-# define INVALID_FILE_ATTRIBUTES ((DWORD)-1) 
+# define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
 #endif
 /*
 ** WinCE lacks native support for file locking so we have to fake it
@@ -6263,3 +6264,4 @@ typedef struct winceLock {
   BOOL bPending;      /* Indicates a pending lock has been obtained */
   BOOL bReserved;     /* Indicates a reserved lock has been obtained */
   BOOL b
+#endif
