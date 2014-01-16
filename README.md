@@ -34,12 +34,12 @@ Vedis in 5 Minutes or Less
 The principal task of a datastore engine is to store and retrieve records as fast as possible. Vedis support both structured and raw data storage.
 
 
-Structured data storage is presented to clients via the command execution interface (CEI). Basically, you execute one or more commands ala Redis (i.e. SET key value; GET key, HSET...) via vedis_exec() and you extract the execution result (The return value of the command) via vedis_exec_result(). Refer to the following page for the list of built-in commands.
+Structured data storage is presented to clients via the command execution interface (CEI). Basically, you execute one or more commands ala Redis (i.e. SET key value; GET key, HSET...) via [vedis_exec()](http://vedis.symisc.net/c_api/vedis_exec.html) and you extract the execution result (The return value of the command) via [vedis_exec_result()](http://vedis.symisc.net/c_api/vedis_exec_result.html). Refer to the [following page](http://vedis.symisc.net/commands.html) for the list of built-in commands.
 
 
 Raw data storage is presented to clients via the Key/Value store interfaces. Vedis is a standard key/value store similar to Berkeley DB, Tokyo Cabinet, LevelDB, etc. but with a rich feature set including support for transactions (ACID), concurrent reader, etc.
 
-Under the KV store, both keys and values are treated as simple arrays of bytes, so content can be anything from ASCII strings, binary blob and even disk files. The KV store layer is presented to clients via a set of interfaces, these includes: vedis_kv_store(), vedis_kv_append(), vedis_kv_fetch_callback(), vedis_kv_append_fmt(), etc.
+Under the KV store, both keys and values are treated as simple arrays of bytes, so content can be anything from ASCII strings, binary blob and even disk files. The KV store layer is presented to clients via a set of interfaces, these includes: [vedis_kv_store()](http://vedis.symisc.net/c_api/vedis_kv_store.html), [vedis_kv_append()](http://vedis.symisc.net/c_api/vedis_kv_append.html), [vedis_kv_fetch_callback()](http://vedis.symisc.net/c_api/vedis_kv_fetch_callback.html), [vedis_kv_append_fmt()](http://vedis.symisc.net/c_api/vedis_kv_append.html), etc.
 
 
 
@@ -127,7 +127,7 @@ Under the KV store, both keys and values are treated as simple arrays of bytes, 
 
 
 
-* The datastore is created on line 5 using a call to vedis_open(). This is often the first Vedis API call that an application makes and is a prerequisite in order to play with Vedis.
+* The datastore is created on line 5 using a call to [vedis_open()](http://vedis.symisc.net/c_api/vedis_open.html). This is often the first Vedis API call that an application makes and is a prerequisite in order to play with Vedis.
 * As you can see, executing commands (ala Redis) under Vedis is pretty simple and involve only a single call to vedis_exec() or vedis_exec_fmt(). This is done on line 9, 13, 17, 45 on our example regardless how much the executed command is complex.
 * Execution result (i.e. Return value) of the last executed command is extracted via vedis_exec_result(). This is done on line 27, 31, 40, 54 in our example.
 * After that, the host application need to cast this object value (i.e. Return value of the last executed command) to the desired C type (String, Integer, Double or Boolean). For this purpose, a set of smart interfaces is available: vedis_value_to_string(), vedis_value_to_int(), vedis_value_to_bool(),  etc. This done on line 35, 46, 64 and 76.
