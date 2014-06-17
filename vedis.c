@@ -14920,6 +14920,7 @@ static int lhAllocateSpace(lhpage *pPage,sxu64 nAmount,sxu16 *pOfft)
 		SyBigEndianPack16(&zBlock[2],iBlksz-nByte); /* Block size*/
 		/* Offset of the new block */
 		iNext = (sxu16)(zPtr - pPage->pRaw->zData);
+		iBlksz = nByte;
 	}
 	/* Fix offsets */
 	if( zPrev ){
@@ -14931,7 +14932,7 @@ static int lhAllocateSpace(lhpage *pPage,sxu64 nAmount,sxu16 *pOfft)
 		SyBigEndianPack16(&pPage->pRaw->zData[2/* Offset of the first cell1*/],iNext);
 	}
 	/* All done */
-	pPage->nFree -= nByte;
+	pPage->nFree -= iBlksz;
 	return VEDIS_OK;
 }
 /*
