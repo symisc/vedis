@@ -15740,18 +15740,22 @@ static int lhFindSlavePage(lhpage *pPage,sxu64 nAmount,sxu16 *pOfft,lhpage **ppS
 	/* Look for an already attached slave page */
 	for( i = 0 ; i < pMaster->iSlave ; ++i ){
 		/* Find a free chunk big enough */
-		rc = lhAllocateSpace(pSlave,L_HASH_CELL_SZ+nAmount,&iOfft);
+		sxu16 size = L_HASH_CELL_SZ + nAmount;
+		rc = lhAllocateSpace(pSlave,size,&iOfft);
 		if( rc != VEDIS_OK ){
 			/* A space for cell header only */
-			rc = lhAllocateSpace(pSlave,L_HASH_CELL_SZ,&iOfft);
+			size = L_HASH_CELL_SZ;
+			rc = lhAllocateSpace(pSlave,size,&iOfft);
 		}
 		if( rc == VEDIS_OK ){
 			/* All done */
 			if( pOfft ){
 				*pOfft = iOfft;
+			}else{
+				rc = lhRestoreSpace(pSlave, iOfft, size);
 			}
 			*ppSlave = pSlave;
-			return VEDIS_OK;
+			return rc;
 		}
 		/* Point to the next slave page */
 		pSlave = pSlave->pNextSlave;
