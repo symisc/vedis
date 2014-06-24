@@ -6119,6 +6119,25 @@ static int vedisKvIoPageDontMakeHot(vedis_page *pRaw)
 		return VEDIS_OK;
 	}
 	pPage->flags |= PAGE_DONT_MAKE_HOT;
+
+	/* Remove from hot dirty list if it is already there */
+	if( pPage->flags & PAGE_HOT_DIRTY ){
+		Pager *pPager = pPage->pPager;
+		if( pPage->pNextHot ){
+			pPage->pNextHot->pPrevHot = pPage->pPrevHot;
+		}
+		if( pPage->pPrevHot ){
+			pPage->pPrevHot->pNextHot = pPage->pNextHot;
+		}
+		if( pPager->pFirstHot == pPage ){
+			pPager->pFirstHot = pPage->pPrevHot;
+		}
+		if( pPager->pHotDirty == pPage ){
+			pPager->pHotDirty = pPage->pNextHot;
+		}
+		pPager->nHot--;
+		pPage->flags &= ~PAGE_HOT_DIRTY;
+	}
 	return VEDIS_OK;
 }
 /* 
