@@ -1,6 +1,6 @@
 /*
  * Symisc Vedis: A Highly Efficient Embeddable Data Store Engine.
- * Copyright (C) 2013, Symisc Systems http://vedis.symisc.net/
+ * Copyright (C) 2013 - 2018, Symisc Systems http://vedis.symisc.net/
  * Version 1.2.6
  * For information on licensing, redistribution of this file, and for a DISCLAIMER OF ALL WARRANTIES
  * please contact Symisc Systems via:
@@ -11,7 +11,7 @@
  *      http://vedis.symisc.net/
  */
 /*
- * Copyright (C) 2013 Symisc Systems, S.U.A.R.L [M.I.A.G Mrad Chems Eddine <chm@symisc.net>].
+ * Copyright (C) 2013 - 2018 Symisc Systems, S.U.A.R.L [M.I.A.G Mrad Chems Eddine <chm@symisc.net>].
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -14791,8 +14791,8 @@ static int lhPageDefragment(lhpage *pPage)
 	lhcell *pCell;
 	/* Get a temporary page from the pager. This opertaion never fail */
 	zTmp = pEngine->pIo->xTmpPage(pEngine->pIo->pHandle);
-	/* Move the target cells to the begining */
-	pCell = pPage->pList;
+	/* Move the target cells to the beginning */
+	pCell = pPage->pMaster->pList;
 	/* Write the slave page number */
 	SyBigEndianPack64(&zTmp[2/*Offset of the first cell */+2/*Offset of the first free block */],pPage->sHdr.iSlave);
 	zPtr = &zTmp[L_HASH_PAGE_HDR_SZ]; /* Offset to start writing from */
@@ -23146,7 +23146,7 @@ int vedis_rollback(vedis *pStore)
 /* END-OF-IMPLEMENTATION: vedis@embedded@symisc 34-09-46 */
 /*
  * Symisc Vedis: A Highly Efficient Embeddable Data Store Engine.
- * Copyright (C) 2013, Symisc Systems http://vedis.symisc.net/
+ * Copyright (C) 2013 - 2018, Symisc Systems http://vedis.symisc.net/
  * Version 1.2.6
  * For information on licensing, redistribution of this file, and for a DISCLAIMER OF ALL WARRANTIES
  * please contact Symisc Systems via:
@@ -23157,7 +23157,7 @@ int vedis_rollback(vedis *pStore)
  *      http://vedis.symisc.net/
  */
 /*
- * Copyright (C) 2013 Symisc Systems, S.U.A.R.L [M.I.A.G Mrad Chems Eddine <chm@symisc.net>].
+ * Copyright (C) 2013 - 2018 Symisc Systems, S.U.A.R.L [M.I.A.G Mrad Chems Eddine <chm@symisc.net>].
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
