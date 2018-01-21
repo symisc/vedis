@@ -3,7 +3,7 @@
 #define  _VEDIS_H_
 /*
  * Symisc Vedis: A Highly Efficient Embeddable Data Store Engine.
- * Copyright (C) 2013, Symisc Systems http://vedis.symisc.net/
+ * Copyright (C) 2013 - 2018, Symisc Systems http://vedis.symisc.net/
  * Version 1.2.6
  * For information on licensing, redistribution of this file, and for a DISCLAIMER OF ALL WARRANTIES
  * please contact Symisc Systems via:
@@ -14,7 +14,7 @@
  *      http://vedis.symisc.net/
  */
 /*
- * Copyright (C) 2013 Symisc Systems, S.U.A.R.L [M.I.A.G Mrad Chems Eddine <chm@symisc.net>].
+ * Copyright (C) 2013 - 2018 Symisc Systems, S.U.A.R.L [M.I.A.G Mrad Chems Eddine <chm@symisc.net>].
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
