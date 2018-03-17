@@ -41,91 +41,89 @@ Raw data storage is presented to clients via the Key/Value store interfaces. Ved
 
 Under the KV store, both keys and values are treated as simple arrays of bytes, so content can be anything from ASCII strings, binary blob and even disk files. The KV store layer is presented to clients via a set of interfaces, these includes: [vedis_kv_store()](http://vedis.symisc.net/c_api/vedis_kv_store.html), [vedis_kv_append()](http://vedis.symisc.net/c_api/vedis_kv_append.html), [vedis_kv_fetch_callback()](http://vedis.symisc.net/c_api/vedis_kv_fetch_callback.html), [vedis_kv_append_fmt()](http://vedis.symisc.net/c_api/vedis_kv_append.html), etc.
 
+```cpp
+vedis *pStore; /* Datastore handle */
+int rc;
 
+/* Create our datastore */
+rc = vedis_open(&pStore,argc > 1 ? argv[1] /* On-disk DB */ : ":mem:"/* In-mem DB */);
+if( rc != VEDIS_OK ){  /* Seriously? */  return; }
 
-    vedis *pStore; /* Datastore handle */
-    int rc;
+/* Execute the simplest command */
+rc = vedis_exec(pStore,"SET test 'Hello World'",-1);
+if( rc != VEDIS_OK ){ /* Handle error */ }
 
-    /* Create our datastore */
-    rc = vedis_open(&pStore,argc > 1 ? argv[1] /* On-disk DB */ : ":mem:"/* In-mem DB */);
-    if( rc != VEDIS_OK ){  /* Seriously? */  return; }
+/* Another simple command (Multiple set) */
+rc = vedis_exec(pStore,"MSET username james age 27 mail dude@example.com",-1);
+if( rc != VEDIS_OK ){ /* Handle error */ }
 
-    /* Execute the simplest command */
-    rc = vedis_exec(pStore,"SET test 'Hello World'",-1);
-    if( rc != VEDIS_OK ){ /* Handle error */ }
+/* A quite complex command (Multiple hash set) using foreign data */
+rc = vedis_exec_fmt(pStore,
+     "HMSET config pid %d user %s os %s scm %s",
+      1024    /* pid */,
+      "dean", /* user */
+      "FreeBSD", /* OS */
+      "Git"      /* SCM */
+   );
+if( rc != VEDIS_OK ){ /* Handle error */ }
 
-    /* Another simple command (Multiple set) */
-    rc = vedis_exec(pStore,"MSET username james age 27 mail dude@example.com",-1);
-    if( rc != VEDIS_OK ){ /* Handle error */ }
+/* Fetch some data */
+rc = vedis_exec(pStore,"GET test",-1);
+if( rc != VEDIS_OK ){ /* Seriously? */ }
 
-    /* A quite complex command (Multiple hash set) using foreign data */
-    rc = vedis_exec_fmt(pStore,
-         "HMSET config pid %d user %s os %s scm %s",
-          1024    /* pid */,
-          "dean", /* user */
-          "FreeBSD", /* OS */
-          "Git"      /* SCM */
-       );
-    if( rc != VEDIS_OK ){ /* Handle error */ }
+/* Extract the return value of the last executed command (i.e. 'GET test') " */
+vedis_exec_result(pStore,&pResult);
+{
+    const char *zResponse;
+     /* Cast the vedis object to a string */
+     zResponse = vedis_value_to_string(pResult,0);
+     /* Output */
+     printf(" test ==> %s\n",zResponse); /* test ==> 'Hello world' */
+}
 
-    /* Fetch some data */
-    rc = vedis_exec(pStore,"GET test",-1);
-    if( rc != VEDIS_OK ){ /* Seriously? */ }
+vedis_exec(pStore,"GET mail",-1);
+/* 'GET mail' return value */
+vedis_exec_result(pStore,&pResult);
+{
+   const char *zResponse;
+   /* Cast the vedis object to a string */
+   zResponse = vedis_value_to_string(pResult,0);
+   /* Output */
+   printf(" mail ==> %s\n",zResponse); /* Should be 'dude@example.com' */
+}
 
-    /* Extract the return value of the last executed command (i.e. 'GET test') " */
-    vedis_exec_result(pStore,&pResult);
-    {
-        const char *zResponse;
-         /* Cast the vedis object to a string */
-         zResponse = vedis_value_to_string(pResult,0);
-         /* Output */
-         printf(" test ==> %s\n",zResponse); /* test ==> 'Hello world' */
-    }
+/*
+ * A command which return multiple value in array.
+ */
+vedis_exec(pStore,"MGET username age",-1); /* james 27*/
+vedis_exec_result(pStore,&pResult);
 
-    vedis_exec(pStore,"GET mail",-1);
-    /* 'GET mail' return value */
-    vedis_exec_result(pStore,&pResult);
-    {
-       const char *zResponse;
-       /* Cast the vedis object to a string */
-       zResponse = vedis_value_to_string(pResult,0);
-       /* Output */
-       printf(" mail ==> %s\n",zResponse); /* Should be 'dude@example.com' */
-    }
+if( vedis_value_is_array(pResult) ){
+   /* Iterate over the elements of the returned array */
+   vedis_value *pEntry;
+   puts("Array entries:");
+   while((pEntry = vedis_array_next_elem(pResult)) != 0 ){
+     const char *zEntry;
+     /* Cast to string and output */
+     zEntry = vedis_value_to_string(pEntry,0);
+     /* Output */
+     printf("\t%s\n",zEntry);
+  }
+}
 
-    /*
-     * A command which return multiple value in array.
-     */
-    vedis_exec(pStore,"MGET username age",-1); /* james 27*/
-    vedis_exec_result(pStore,&pResult);
-
-    if( vedis_value_is_array(pResult) ){
-       /* Iterate over the elements of the returned array */
-       vedis_value *pEntry;
-       puts("Array entries:");
-       while((pEntry = vedis_array_next_elem(pResult)) != 0 ){
-         const char *zEntry;
-         /* Cast to string and output */
-         zEntry = vedis_value_to_string(pEntry,0);
-         /* Output */
-         printf("\t%s\n",zEntry);
-      }
-    }
-
-    /* Extract hashtable data */
-    vedis_exec(pStore,"HGET config pid",-1); /* 1024 */
-    vedis_exec_result(pStore,&pResult);
-    {
-      int pid;
-      /* Cast to integer */
-      pid = vedis_value_to_int(pResult);
-      /* Output */
-      printf("pid ==> %d\n",pid); /* Should be 1024 */
-    }
-    /* Finally, auto-commit the transaction and close our datastore */
-    vedis_close(pStore);
-
-
+/* Extract hashtable data */
+vedis_exec(pStore,"HGET config pid",-1); /* 1024 */
+vedis_exec_result(pStore,&pResult);
+{
+  int pid;
+  /* Cast to integer */
+  pid = vedis_value_to_int(pResult);
+  /* Output */
+  printf("pid ==> %d\n",pid); /* Should be 1024 */
+}
+/* Finally, auto-commit the transaction and close our datastore */
+vedis_close(pStore);
+```
 
 * The datastore is created on line 5 using a call to [vedis_open()](http://vedis.symisc.net/c_api/vedis_open.html). This is often the first Vedis API call that an application makes and is a prerequisite in order to play with Vedis.
 * As you can see, executing commands (ala Redis) under Vedis is pretty simple and involve only a single call to vedis_exec() or vedis_exec_fmt(). This is done on line 9, 13, 17, 45 on our example regardless how much the executed command is complex.
