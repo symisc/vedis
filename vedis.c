@@ -1801,6 +1801,7 @@ VEDIS_PRIVATE  SyString * vedisTableName(vedis_table *pEntry);
 VEDIS_PRIVATE int vedisOnCommit(void *pUserData);
 /* cmd.c */
 VEDIS_PRIVATE int vedisRegisterBuiltinCommands(vedis *pVedis);
+VEDIS_PRIVATE int vedisDeleteBuiltinCommands(vedis *pVedis);
 /* json.c */
 VEDIS_PRIVATE int vedisJsonSerialize(vedis_value *pValue,SyBlob *pOut);
 /* obj.c */
@@ -20436,89 +20437,99 @@ static int vedis_cmd_begin(vedis_context *pCtx, int nArg, vedis_value **apArg)
 /*
  * Register the built-in Vedis command defined above.
  */
+static const struct vedis_built_command {
+	const char *zName; /* Command name */
+	ProcVedisCmd xCmd; /* Implementation of the command */
+}builtinCommands[] = {
+	{ "DEL",       vedis_cmd_del },
+	{ "REMOVE",    vedis_cmd_del },
+	{ "EXISTS",    vedis_cmd_exists },
+	{ "APPEND",    vedis_cmd_append },
+	{ "STRLEN",    vedis_cmd_strlen },
+	{ "GET",       vedis_cmd_get    },
+	{ "COPY",      vedis_cmd_copy   },
+	{ "MOVE",      vedis_cmd_move   },
+	{ "MGET",      vedis_cmd_mget   },
+	{ "SET",       vedis_cmd_set    },
+	{ "SETNX",     vedis_cmd_setnx  },
+	{ "MSET",      vedis_cmd_mset   },
+	{ "MSETNX",    vedis_cmd_msetnx },
+	{ "GETSET",    vedis_cmd_getset },
+	{ "INCR",      vedis_cmd_incr   },
+	{ "DECR",      vedis_cmd_decr   },
+	{ "INCRBY",    vedis_cmd_incrby },
+	{ "DECRBY",    vedis_cmd_decrby },
+	{ "HGET",      vedis_cmd_hget   },
+	{ "HEXISTS",   vedis_cmd_hexists},
+	{ "HDEL",      vedis_cmd_hdel   },
+	{ "HLEN",      vedis_cmd_hlen   },
+	{ "HMGET",     vedis_cmd_hmget  },
+	{ "HKEYS",     vedis_cmd_hkeys  },
+	{ "HVALS",     vedis_cmd_hvals  },
+	{ "HGETALL",   vedis_cmd_hgetall },
+	{ "HSET",      vedis_cmd_hset   },
+	{ "HMSET",     vedis_cmd_hmset  },
+	{ "HSETNX",    vedis_cmd_hsetnx },
+	{ "SADD",      vedis_cmd_sadd   },
+	{ "SCARD",     vedis_cmd_scard  },
+	{ "SISMEMBER", vedis_cmd_sismember },
+	{ "SPOP",      vedis_cmd_spop   },
+	{ "SPEEK",     vedis_cmd_speek  },
+	{ "STOP",      vedis_cmd_stop   },
+	{ "SREM",      vedis_cmd_srem   },
+	{ "SMEMBERS",  vedis_cmd_smembers },
+	{ "SDIFF",     vedis_cmd_sdiff  },
+	{ "SINTER",    vedis_cmd_sinter },
+	{ "SLEN",      vedis_cmd_slen   },
+	{ "LINDEX",    vedis_cmd_lindex },
+	{ "LLEN",      vedis_cmd_llen   },
+	{ "LPOP",      vedis_cmd_lpop   },
+	{ "LPUSH",     vedis_cmd_lpush  },
+	{ "RAND",      vedis_cmd_rand   },
+	{ "GETRANDMAX", vedis_cmd_getrandmax },
+	{ "RANDSTR",    vedis_cmd_rand_str },
+	{ "BASE64",     vedis_cmd_base64_encode },
+	{ "BASE64_DEC", vedis_cmd_base64_decode },
+	{ "SOUNDEX",    vedis_cmd_soundex  },
+	{ "SIZE_FMT",   vedis_cmd_size_format },
+#ifdef VEDIS_ENABLE_HASH_CMD
+	{ "MD5",        vedis_cmd_md5 },
+	{ "SHA1",       vedis_cmd_sha1 },
+	{ "CRC32",      vedis_cmd_crc32 },
+#endif /* VEDIS_ENABLE_HASH_CMD */
+	{ "GETCSV",     vedis_cmd_str_getcsv },
+	{ "STRIP_TAG",  vedis_cmd_strip_tags },
+	{ "STR_SPLIT",  vedis_cmd_str_split  },
+	{ "TIME",       vedis_cmd_time       },
+	{ "DATE",       vedis_cmd_date       },
+	{ "OS",         vedis_cmd_os         },
+	{ "ECHO",       vedis_cmd_echo       },
+	{ "PRINT",      vedis_cmd_echo       },
+	{ "ABORT",      vedis_cmd_abort      },
+	{ "CMD_LIST",   vedis_cmd_c_list     },
+	{ "TABLE_LIST", vedis_cmd_table_list },
+	{ "VEDIS",      vedis_cmd_credits    },
+	{ "COMMIT",     vedis_cmd_commit     },
+	{ "ROLLBACK",   vedis_cmd_rollback   },
+	{ "BEGIN",      vedis_cmd_begin      },
+};
 VEDIS_PRIVATE int vedisRegisterBuiltinCommands(vedis *pVedis)
 {
-	static const struct vedis_built_command {
-		const char *zName; /* Command name */
-		ProcVedisCmd xCmd; /* Implementation of the command */
-	}aCmd[] = {
-		{ "DEL",       vedis_cmd_del },
-		{ "REMOVE",    vedis_cmd_del },
-		{ "EXISTS",    vedis_cmd_exists },
-		{ "APPEND",    vedis_cmd_append },
-		{ "STRLEN",    vedis_cmd_strlen },
-		{ "GET",       vedis_cmd_get    },
-		{ "COPY",      vedis_cmd_copy   },
-		{ "MOVE",      vedis_cmd_move   },
-		{ "MGET",      vedis_cmd_mget   },
-		{ "SET",       vedis_cmd_set    },
-		{ "SETNX",     vedis_cmd_setnx  },
-		{ "MSET",      vedis_cmd_mset   },
-		{ "MSETNX",    vedis_cmd_msetnx },
-		{ "GETSET",    vedis_cmd_getset },
-		{ "INCR",      vedis_cmd_incr   },
-		{ "DECR",      vedis_cmd_decr   },
-		{ "INCRBY",    vedis_cmd_incrby },
-		{ "DECRBY",    vedis_cmd_decrby },
-		{ "HGET",      vedis_cmd_hget   },
-		{ "HEXISTS",   vedis_cmd_hexists},
-		{ "HDEL",      vedis_cmd_hdel   },
-		{ "HLEN",      vedis_cmd_hlen   },
-		{ "HMGET",     vedis_cmd_hmget  },
-		{ "HKEYS",     vedis_cmd_hkeys  },
-		{ "HVALS",     vedis_cmd_hvals  }, 
-		{ "HGETALL",   vedis_cmd_hgetall },
-		{ "HSET",      vedis_cmd_hset   },
-		{ "HMSET",     vedis_cmd_hmset  },
-		{ "HSETNX",    vedis_cmd_hsetnx },
-		{ "SADD",      vedis_cmd_sadd   },
-		{ "SCARD",     vedis_cmd_scard  },
-		{ "SISMEMBER", vedis_cmd_sismember },
-		{ "SPOP",      vedis_cmd_spop   },
-		{ "SPEEK",     vedis_cmd_speek  },
-		{ "STOP",      vedis_cmd_stop   },
-		{ "SREM",      vedis_cmd_srem   },
-		{ "SMEMBERS",  vedis_cmd_smembers },
-		{ "SDIFF",     vedis_cmd_sdiff  },
-		{ "SINTER",    vedis_cmd_sinter },
-		{ "SLEN",      vedis_cmd_slen   },
-		{ "LINDEX",    vedis_cmd_lindex },
-		{ "LLEN",      vedis_cmd_llen   },
-		{ "LPOP",      vedis_cmd_lpop   },
-		{ "LPUSH",     vedis_cmd_lpush  },
-		{ "RAND",      vedis_cmd_rand   },
-		{ "GETRANDMAX", vedis_cmd_getrandmax },
-		{ "RANDSTR",    vedis_cmd_rand_str },
-		{ "BASE64",     vedis_cmd_base64_encode },
-		{ "BASE64_DEC", vedis_cmd_base64_decode },
-		{ "SOUNDEX",    vedis_cmd_soundex  },
-		{ "SIZE_FMT",   vedis_cmd_size_format },
-#ifdef VEDIS_ENABLE_HASH_CMD
-		{ "MD5",        vedis_cmd_md5 },
-		{ "SHA1",       vedis_cmd_sha1 },
-		{ "CRC32",      vedis_cmd_crc32 },
-#endif /* VEDIS_ENABLE_HASH_CMD */
-		{ "GETCSV",     vedis_cmd_str_getcsv },
-		{ "STRIP_TAG",  vedis_cmd_strip_tags },
-		{ "STR_SPLIT",  vedis_cmd_str_split  },
-		{ "TIME",       vedis_cmd_time       },
-		{ "DATE",       vedis_cmd_date       },
-		{ "OS",         vedis_cmd_os         },
-		{ "ECHO",       vedis_cmd_echo       },
-		{ "PRINT",      vedis_cmd_echo       },
-		{ "ABORT",      vedis_cmd_abort      },
-		{ "CMD_LIST",   vedis_cmd_c_list     },
-		{ "TABLE_LIST", vedis_cmd_table_list },
-		{ "VEDIS",      vedis_cmd_credits    },
-		{ "COMMIT",     vedis_cmd_commit     },
-		{ "ROLLBACK",   vedis_cmd_rollback   },
-		{ "BEGIN",      vedis_cmd_begin      },
-	};
 	int rc = VEDIS_OK;
 	sxu32 n;
-	for( n = 0 ; n < SX_ARRAYSIZE(aCmd); ++n ){
+	for( n = 0 ; n < SX_ARRAYSIZE(builtinCommands); ++n ){
 		/* Create the command */
-		rc = vedis_register_command(pVedis,aCmd[n].zName,aCmd[n].xCmd,pVedis);
+		rc = vedis_register_command(pVedis,builtinCommands[n].zName,builtinCommands[n].xCmd,pVedis);
+	}
+	return rc;
+}
+VEDIS_PRIVATE int vedisDeleteBuiltinCommands(vedis *pVedis)
+{
+	int rc = VEDIS_OK;
+	sxu32 n;
+	for( n = 0 ; n < SX_ARRAYSIZE(builtinCommands); ++n ){
+		/* Create the command */
+		rc = vedis_delete_command(pVedis,builtinCommands[n].zName);
 	}
 	return rc;
 }
@@ -21758,6 +21769,8 @@ int vedis_close(vedis *pStore)
 			 return VEDIS_ABORT; /* Another thread have released this instance */
 	 }
 #endif
+	/* Release builtin commands */
+	rc = vedisDeleteBuiltinCommands(pStore);
 	/* Release the engine */
 	rc = vedisEngineRelease(pStore);
 #if defined(VEDIS_ENABLE_THREADS)
