@@ -59,7 +59,7 @@ static void Fatal(vedis *pStore,const char *zMsg)
 		vedis_config(pStore,VEDIS_CONFIG_ERR_LOG,&zErr,&iLen);
 		if( iLen > 0 ){
 			/* Output the error log */
-			puts(zErr); /* Always null termniated */
+			puts(zErr); /* Always null terminated */
 		}
 	}else{
 		if( zMsg ){
