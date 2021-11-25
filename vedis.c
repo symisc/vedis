@@ -12923,7 +12923,9 @@ static sxi32 SyOSUtilRandomSeed(void *pBuf, sxu32 nLen, void *pUnused)
 #elif defined(__UNIXES__)
 	fd = open("/dev/urandom", O_RDONLY);
 	if (fd >= 0 ){
-		if( read(fd, zBuf, nLen) > 0 ){
+		int n = read(fd, zBuf, nLen);
+		close(fd);
+		if( n > 0 ){
 			return SXRET_OK;
 		}
 		/* FALL THRU */
